@@ -14,11 +14,6 @@ from supabase import create_client, Client
 # ---------------------
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-CORS_ORIGINS = os.getenv(
-    "CORS_ORIGINS",
-    "http://localhost:5173,http://localhost:3000,https://scrumpoker-coral.vercel.app",
-).split(",")
-
 if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
     raise Exception("Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY env vars")
 
@@ -26,9 +21,12 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
 app = FastAPI(title="Scrum Poker API", version="1.0.0")
 
+
+CORS_ORIGINS = os.getenv("CORS_ORIGINS", "")  # this is a comma-separated string
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[o.strip() for o in CORS_ORIGINS if o.strip()],
+    allow_origins=[o.strip() for o in CORS_ORIGINS.split(",") if o.strip()],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
