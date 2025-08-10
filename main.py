@@ -26,12 +26,11 @@ CORS_ORIGINS = os.getenv("CORS_ORIGINS", "")  # this is a comma-separated string
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[o.strip() for o in CORS_ORIGINS.split(",") if o.strip()],
+    allow_origins=["https://3178944a-0515-46b2-92e0-c5a5147a3c74.lovableproject.com"],
+    allow_methods=["POST", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type"],
     allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["*"],
 )
-
 # ---------------------
 # Models (backward-compatible bodies, user_id now optional/ignored if JWT present)
 # ---------------------
