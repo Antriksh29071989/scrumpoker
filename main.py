@@ -4,7 +4,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from supabase import create_client, Client
 from typing import List, Optional
-
+from fastapi.middleware.cors import CORSMiddleware
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
@@ -12,10 +12,24 @@ SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
     raise Exception("Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY env vars")
 
+
+
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
 app = FastAPI()
+origins = [
+    "http://localhost:3000",  # or your frontend URL
+    "https://your-frontend-domain.com",
+    "*",  # (optional) allow all origins, but less secure
+]
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # or ["*"] to allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 class User(BaseModel):
     id: str
     username: Optional[str]
