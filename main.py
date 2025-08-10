@@ -204,6 +204,10 @@ def submit_estimate(req: SubmitEstimateRequest):
 
 from fastapi import HTTPException
 
+@app.get("/")
+def root():
+    return {"message": "Hello from the root!"}
+
 @app.post("/reveal", response_model=RevealResponse)
 def reveal(req: RevealRequest):
     user_id = req.user_id
